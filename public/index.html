@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Bacates Forum</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Last Bacates Forum</h1>
+    </header>
+    <main>
+        <div class="container">
+            <div class="left-panel">
+                <div class="input-area">
+                    <label for="display-name">Display Name:</label>
+                    <input type="text" id="display-name" placeholder="Enter display name">
+                    <button onclick="setDisplayName()">Set Display Name</button>
+                </div>
+                <textarea id="post-content" placeholder="Write your message..."></textarea>
+                <button onclick="addPost()">Post</button>
+            </div>
+            <div class="right-panel">
+                <button onclick="togglePeopleList()">People List</button>
+                <ul id="people-list" style="display: none;">
+                    <li id="people"></li>
+                </ul>
+                <p id="active-count">Active Participants: 0</p>
+                <div id="posts"></div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -3,62 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time Chat</title>
+    <title>Chat Room</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
+            height: 500px;
         }
         #messages {
-            width: 80%;
-            max-width: 600px;
-            height: 300px;
-            border: 1px solid #ccc;
-            overflow-y: scroll;
+            flex: 1;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
             margin-bottom: 10px;
+            padding-right: 10px;
+        }
+        .message {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        #input-container {
+            display: flex;
         }
         #input {
-            width: 80%;
-            max-width: 600px;
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            margin-right: 10px;
         }
         #submit {
-            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        #submit:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <div id="messages"></div>
-    <input id="input" type="text" placeholder="Type your message..." />
-    <button id="submit">Send</button>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-container">
+            <input id="input" type="text" placeholder="Type your message..." />
+            <button id="submit">Send</button>
+        </div>
+    </div>
+
     <script>
-        const ws = new WebSocket(`ws://${window.location.host}`);
+        // WebSocket client script
+        document.addEventListener('DOMContentLoaded', () => {
+            const ws = new WebSocket(`ws://${window.location.host}`);
 
-        ws.onmessage = (event) => {
-            const messages = document.getElementById('messages');
-            const message = document.createElement('div');
-            message.textContent = event.data;
-            messages.appendChild(message);
-            messages.scrollTop = messages.scrollHeight;
-        };
+            ws.onmessage = (event) => {
+                const messages = document.getElementById('messages');
+                const message = document.createElement('div');
+                message.className = 'message';
+                message.textContent = event.data;
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
+            };
 
-        document.getElementById('submit').addEventListener('click', () => {
-            const input = document.getElementById('input');
-            if (input.value.trim() !== '') {
-                ws.send(input.value);
-                input.value = '';
-            }
-        });
+            document.getElementById('submit').addEventListener('click', () => {
+                const input = document.getElementById('input');
+                const message = input.value.trim();
+                if (message) {
+                    ws.send(message);
+                    input.value = '';
+                }
+            });
 
-        document.getElementById('input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                document.getElementById('submit').click();
-            }
+            document.getElementById('input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('submit').click();
+                }
+            });
         });
     </script>
 </body>
